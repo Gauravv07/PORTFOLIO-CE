@@ -1,0 +1,613 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gaurav Pandey | Civil Engineer Portfolio</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <style>
+        /* Custom Styles & Animations */
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #0a192f; /* Dark Navy */
+            color: #ccd6f6; /* Light Slate */
+            overflow-x: hidden; /* Prevent horizontal scroll from animation */
+        }
+        
+        #background-animation {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(rgba(17, 34, 64, 0.5) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(17, 34, 64, 0.5) 1px, transparent 1px);
+            background-size: 40px 40px;
+            animation: blueprint-scroll 60s linear infinite;
+            z-index: 0; /* Changed from -1 */
+            opacity: 0.2;
+        }
+
+        @keyframes blueprint-scroll {
+            from { background-position: 0 0; }
+            to { background-position: -120px -120px; }
+        }
+
+        /* Ensure all other content is on top */
+        header, main, footer {
+            position: relative;
+            z-index: 1;
+        }
+
+        .text-teal {
+            color: #64ffda;
+        }
+        .bg-teal {
+            background-color: #64ffda;
+        }
+        .border-teal {
+            border-color: #64ffda;
+        }
+        .nav-link {
+            position: relative;
+            display: inline-block;
+            text-decoration: none;
+            color: #ccd6f6;
+            transition: color 0.3s ease;
+        }
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            width: 100%;
+            transform: scaleX(0);
+            height: 2px;
+            bottom: -4px;
+            left: 0;
+            background-color: #64ffda;
+            transform-origin: bottom right;
+            transition: transform 0.3s ease-out;
+        }
+        .nav-link.active, .nav-link:hover {
+            color: #64ffda;
+        }
+        .nav-link.active::after, .nav-link:hover::after {
+            transform: scaleX(1);
+            transform-origin: bottom left;
+        }
+
+        /* Page Transition Animations */
+        .page {
+            animation: fadeIn 0.6s ease-out;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        /* Glassmorphism effect for cards */
+        .glass-card {
+            background: rgba(23, 42, 70, 0.6);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(100, 255, 218, 0.2);
+            transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+        }
+        .glass-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px -15px rgba(2, 12, 27, 0.7);
+            border-color: rgba(100, 255, 218, 0.5);
+        }
+
+        /* Animated CTA button */
+        .cta-button {
+             animation: pulse-border 2s infinite;
+        }
+        @keyframes pulse-border {
+            0% { box-shadow: 0 0 0 0 rgba(100, 255, 218, 0.4); }
+            70% { box-shadow: 0 0 0 10px rgba(100, 255, 218, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(100, 255, 218, 0); }
+        }
+        
+        /* Modal Styles */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(10, 25, 47, 0.8);
+            backdrop-filter: blur(5px);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+        }
+        .modal-overlay.is-visible {
+            opacity: 1;
+            visibility: visible;
+        }
+        .modal-content {
+            background: #112240;
+            padding: 2rem;
+            border-radius: 0.5rem;
+            max-width: 2xl;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+            transform: scale(0.95);
+            transition: transform 0.3s ease;
+        }
+        .modal-overlay.is-visible .modal-content {
+            transform: scale(1);
+        }
+        /* Loading Spinner */
+        .loader {
+            width: 48px;
+            height: 48px;
+            border: 5px solid #64ffda;
+            border-bottom-color: transparent;
+            border-radius: 50%;
+            display: inline-block;
+            box-sizing: border-box;
+            animation: rotation 1s linear infinite;
+        }
+        @keyframes rotation {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+    </style>
+</head>
+<body class="antialiased">
+    
+    <div id="background-animation"></div>
+
+    <!-- Header -->
+    <header id="header" class="fixed top-0 left-0 right-0 z-50 transition-all duration-300 bg-[#0a192f] bg-opacity-90 backdrop-blur-sm shadow-lg">
+        <nav class="container mx-auto px-6 md:px-12 py-4 flex justify-between items-center">
+            <a href="#home" class="nav-link">
+                 <img src="https://img.icons8.com/?size=100&id=iKwDC0dEKn1u&format=png&color=FFFFFF" alt="Logo" class="h-8 w-8">
+            </a>
+            <div id="desktop-nav" class="hidden md:flex items-center space-x-8">
+                <a href="#about" class="nav-link">About</a>
+                <a href="#skills" class="nav-link">Skills</a>
+                <a href="#experience" class="nav-link">Experience</a>
+                <a href="#projects" class="nav-link">Projects</a>
+                <a href="#contact" class="nav-link">Contact</a>
+            </div>
+            <button id="mobile-menu-button" class="md:hidden text-teal focus:outline-none">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
+            </button>
+        </nav>
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="hidden md:hidden bg-[#0a192f] bg-opacity-95 px-6 pt-2 pb-4 space-y-2">
+            <a href="#about" class="block nav-link py-2">About</a>
+            <a href="#skills" class="block nav-link py-2">Skills</a>
+            <a href="#experience" class="block nav-link py-2">Experience</a>
+            <a href="#projects" class="block nav-link py-2">Projects</a>
+            <a href="#contact" class="block nav-link py-2">Contact</a>
+        </div>
+    </header>
+
+    <main class="container mx-auto px-6 md:px-12 pt-24 md:pt-32">
+        <!-- Page Content -->
+        <div id="page-container">
+            <!-- Home Page -->
+            <div id="home-page" class="page">
+                <section class="min-h-[80vh] flex flex-col justify-center">
+                    <div class="max-w-4xl">
+                        <p class="text-teal text-lg mb-4">Hi, my name is</p>
+                        <h1 class="text-4xl sm:text-6xl md:text-7xl font-extrabold text-slate-100">Gaurav Pandey.</h1>
+                        <h2 class="text-4xl sm:text-5xl md:text-6xl font-bold text-slate-400 mt-2">I design the arteries of modern transit.</h2>
+                        <p class="mt-6 max-w-2xl text-lg text-slate-400">
+                            I'm a dynamic Civil Engineer specializing in highway and railway design. I have a passion for creating robust infrastructure, from geometric alignments and interchanges to detailed project reports for major authorities like NHAI, MoRTH, and Indian Railways.
+                        </p>
+                        <a href="#projects" class="cta-nav-link inline-block mt-8 px-8 py-4 border-2 border-teal text-teal rounded-md font-medium hover:bg-teal/10 transition-colors duration-300 cta-button">
+                            View My Blueprints
+                        </a>
+                    </div>
+                </section>
+            </div>
+            
+            <!-- About Page -->
+            <div id="about-page" class="page hidden">
+                <section class="py-12">
+                    <h2 class="text-3xl font-bold mb-8 text-slate-100 flex items-center">
+                        <span class="text-teal mr-3">01.</span> About Me
+                        <span class="flex-grow ml-6 h-px bg-slate-700"></span>
+                    </h2>
+                    <div class="grid md:grid-cols-5 gap-12 items-center">
+                        <div class="md:col-span-3 text-slate-400 space-y-4 text-lg">
+                            <p>I graduated with a B.Tech in Civil Engineering (CGPA: 8.49), where I specialized in infrastructure design and project management. This academic journey provided me with advanced proficiency in critical industry tools like Civil 3D and AutoCAD and hands-on experience leading projects on geometric alignments and DPR preparation.</p>
+                            <p>Before university, I completed my Intermediate (78.8%) and High School (CGPA: 10) with distinction, developing strong analytical and technical skills that form the bedrock of my engineering approach.</p>
+                            <p class="font-semibold text-slate-300 mt-4">Education:</p>
+                            <ul class="list-disc list-inside space-y-2">
+                                <li><span class="font-bold text-slate-300">Dr. A.P.J. Abdul Kalam Technical University</span> (2019–2023)</li>
+                                <li><span class="font-bold text-slate-300">St. Xavier’s High School</span> (2016–2018)</li>
+                            </ul>
+                        </div>
+                        <div class="md:col-span-2 flex justify-center items-center">
+                            <div class="w-64 h-64 relative group">
+                                <div class="absolute inset-0 border-2 border-teal rounded-lg transform rotate-6 transition-transform duration-300 group-hover:rotate-3 group-hover:scale-105"></div>
+                                <img src="https://images.unsplash.com/photo-1581092580484-067f13143c79?q=80&w=1887&auto=format&fit=crop" alt="Civil Engineer Portrait" class="relative w-full h-full object-cover rounded-lg shadow-xl grayscale hover:grayscale-0 transition-all duration-300" onerror="this.onerror=null;this.src='https://placehold.co/400x400/0a192f/64ffda?text=GP';">
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+
+            <!-- Skills Page -->
+            <div id="skills-page" class="page hidden">
+                 <section class="py-12">
+                    <h2 class="text-3xl font-bold mb-12 text-slate-100 flex items-center">
+                        <span class="text-teal mr-3">02.</span> My Toolkit
+                        <span class="flex-grow ml-6 h-px bg-slate-700"></span>
+                    </h2>
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                        <!-- Design & Analysis -->
+                        <div class="skill-category-card">
+                            <h3 class="text-xl font-bold text-slate-200 mb-4">Design & Analysis</h3>
+                            <div class="grid grid-cols-2 gap-4 text-sm">
+                                <div class="skill-item"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mr-2 text-teal"><path d="M17.8 19.2 16 11l3.5-3.5C21 6 21.5 4 21 3c-1-.5-3 0-4.5 1.5L13 8 4.8 6.2"/><path d="m2 5 6 6"/></svg>Horizontal Design</div>
+                                <div class="skill-item"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mr-2 text-teal"><path d="M22 12c-2.5 0-2.5-4-5-4s-2.5 4-5 4-2.5-4-5-4-2.5 4-5 4"/><path d="M22 12v6H2v-6"/></svg>Vertical Design</div>
+                                <div class="skill-item"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mr-2 text-teal"><path d="M12 2a10 10 0 1 0 10 10"/><path d="M12 12a10 10 0 0 1 10-10"/><path d="M12 12a10 10 0 0 0-10-10"/><path d="M12 12a10 10 0 0 1-10 10"/></svg>Interchange Design</div>
+                                <div class="skill-item"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mr-2 text-teal"><path d="M2 12h20"/><path d="M12 2v20"/></svg>Corridor Modelling</div>
+                            </div>
+                        </div>
+                        <!-- Software Proficiency -->
+                        <div class="skill-category-card">
+                            <h3 class="text-xl font-bold text-slate-200 mb-4">Software Proficiency</h3>
+                             <div class="grid grid-cols-2 gap-4 text-sm">
+                                <div class="skill-item">Civil 3D</div>
+                                <div class="skill-item">AutoCAD</div>
+                                <div class="skill-item">Infraworks</div>
+                                <div class="skill-item">ArcGIS/QGIS</div>
+                                <div class="skill-item">Python</div>
+                                <div class="skill-item">Google Earth</div>
+                            </div>
+                        </div>
+                        <!-- Core Competencies -->
+                         <div class="skill-category-card">
+                            <h3 class="text-xl font-bold text-slate-200 mb-4">Core Competencies</h3>
+                             <div class="grid grid-cols-2 gap-4 text-sm">
+                                <div class="skill-item"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mr-2 text-teal"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/><line x1="16" x2="8" y1="13" y2="13"/><line x1="16" x2="8" y1="17" y2="17"/><line x1="10" x2="8" y1="9" y2="9"/></svg>DPR Preparation</div>
+                                <div class="skill-item"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mr-2 text-teal"><path d="M21.5 12c0-3.9-3.3-7-7.5-7-2.5 0-4.4.9-5.7 2.2"/><path d="M2.5 12c0 3.9 3.3 7 7.5 7 2.5 0 4.4-.9 5.7-2.2"/><line x1="12" x2="12" y1="2" y2="22"/></svg>Geo Mapping</div>
+                                <div class="skill-item"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mr-2 text-teal"><path d="M12 20.94c1.5 0 2.8-.8 3.5-2.06"/><path d="M12 3.06c-1.5 0-2.8.8-3.5 2.06"/><path d="M17.6 6.36C19.2 7.96 20 10 20 12s-.8 4.04-2.4 5.64"/><path d="M6.4 17.64C4.8 16.04 4 14 4 12s.8-4.04 2.4-5.64"/></svg>Feasibility Studies</div>
+                                 <div class="skill-item"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mr-2 text-teal"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>Team Coordination</div>
+                            </div>
+                        </div>
+                    </div>
+                     <style>
+                        .skill-category-card { background-color: #112240; padding: 1.5rem; border-radius: 0.5rem; border: 1px solid #1d2d44; transition: all 0.3s ease; }
+                         .skill-category-card:hover { transform: translateY(-5px); border-color: #64ffda; }
+                        .skill-item { display: flex; align-items: center; background-color: #0a192f; padding: 0.5rem 0.75rem; border-radius: 0.25rem; color: #a8b2d1; font-weight: 500; }
+                    </style>
+                </section>
+            </div>
+            
+            <!-- Experience Page -->
+            <div id="experience-page" class="page hidden">
+                <section class="py-12">
+                     <h2 class="text-3xl font-bold mb-12 text-slate-100 flex items-center">
+                         <span class="text-teal mr-3">03.</span> Career Journey
+                        <span class="flex-grow ml-6 h-px bg-slate-700"></span>
+                    </h2>
+                    <div class="max-w-3xl mx-auto">
+                         <div class="relative pl-8 border-l-2 border-slate-700">
+                            <!-- Experience Item 1 -->
+                            <div class="mb-12 transition-all duration-300 hover:bg-slate-800/20 p-4 rounded-md">
+                                 <div class="absolute w-4 h-4 bg-teal rounded-full -left-2 mt-1.5 border-2 border-[#0a192f]"></div>
+                                 <h3 class="text-xl font-bold text-slate-100">Design Engineer (Roads)</h3>
+                                 <p class="text-teal mb-2">Chaitanya Projects Consultancy Ltd | June 2023 – Present</p>
+                                 <p class="text-slate-400">Continuing my professional growth by contributing to key road infrastructure projects, further honing my design and project management skills.</p>
+                            </div>
+                            <!-- Experience Item 2 -->
+                            <div class="transition-all duration-300 hover:bg-slate-800/20 p-4 rounded-md">
+                                 <div class="absolute w-4 h-4 bg-teal rounded-full -left-2 mt-1.5 border-2 border-[#0a192f]"></div>
+                                 <h3 class="text-xl font-bold text-slate-100">Intern</h3>
+                                 <p class="text-teal mb-2">IIPC KIET & SDFS KIET | June 2022 – July 2022</p>
+                                 <ul class="list-disc list-inside text-slate-400 space-y-2">
+                                     <li>Contributed to highway and railway design projects for NHAI, UPEIDA, and Indian Railways.</li>
+                                     <li>Managed cross-sections, superelevation design, and earthwork calculations for highways.</li>
+                                     <li>Collaborated with multidisciplinary teams to deliver solutions compliant with MoRTH standards.</li>
+                                 </ul>
+                            </div>
+                         </div>
+                    </div>
+                </section>
+            </div>
+
+            <!-- Projects Page -->
+            <div id="projects-page" class="page hidden">
+                <section class="py-12">
+                    <h2 class="text-3xl font-bold mb-12 text-slate-100 flex items-center">
+                         <span class="text-teal mr-3">04.</span> Featured Projects
+                        <span class="flex-grow ml-6 h-px bg-slate-700"></span>
+                    </h2>
+                    <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                        <!-- Project 1 -->
+                        <div class="glass-card rounded-lg p-6 flex flex-col">
+                            <div class="flex justify-between items-center mb-4">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#64ffda" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-map-pinned"><path d="M18 8c0 4.5-6 9-6 9s-6-4.5-6-9a6 6 0 0 1 12 0Z"/><circle cx="12" cy="8" r="2"/><path d="M8.83 17.12V22l-3.4-1.6a2 2 0 0 1-1.17-1.84v-3.55"/><path d="m18.83 17.12 3.4-1.6a2 2 0 0 0 1.17-1.84v-3.55"/><path d="M12 22v-3"/></svg>
+                                <span class="text-xs font-semibold bg-teal/10 text-teal px-3 py-1 rounded-full">NHAI</span>
+                            </div>
+                            <h3 class="project-title text-xl font-bold text-slate-100 mb-2">Aligarh - Bijnor Greenfield Highway</h3>
+                            <p class="project-desc text-slate-400 flex-grow">Conducted a 240 km alignment study, optimizing geometric and economic viability, including traffic analysis and interchange proposals.</p>
+                            <button class="deconstruct-button mt-4 px-4 py-2 bg-teal/10 text-teal text-sm font-semibold rounded-lg hover:bg-teal/20 transition-colors">✨ Deconstruct Project</button>
+                        </div>
+                        <!-- Project 2 -->
+                        <div class="glass-card rounded-lg p-6 flex flex-col">
+                            <div class="flex justify-between items-center mb-4">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#64ffda" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-split"><path d="M16 3h5v5"/><path d="M8 3H3v5"/><path d="M12 22v-8.3a4 4 0 0 0-1.172-2.872L3 3"/><path d="m15 9 6-6"/></svg>
+                                <span class="text-xs font-semibold bg-teal/10 text-teal px-3 py-1 rounded-full">UPEIDA</span>
+                            </div>
+                            <h3 class="project-title text-xl font-bold text-slate-100 mb-2">JHANSI-LINK Expressway</h3>
+                            <p class="project-desc text-slate-400 flex-grow">Executed feasibility and design for a 144 km expressway, leveraging DEM data for terrain analysis and optimizing 7 interchanges.</p>
+                            <button class="deconstruct-button mt-4 px-4 py-2 bg-teal/10 text-teal text-sm font-semibold rounded-lg hover:bg-teal/20 transition-colors">✨ Deconstruct Project</button>
+                        </div>
+                        <!-- Project 3 -->
+                        <div class="glass-card rounded-lg p-6 flex flex-col">
+                            <div class="flex justify-between items-center mb-4">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#64ffda" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-mountain-snow"><path d="m8 3 4 8 5-5 5 15H2L8 3z"/><path d="M4.14 15.08c2.62-1.57 5.24-1.43 7.86.42 2.74 1.94 5.49 2.19 8.23.19"/></svg>
+                                <span class="text-xs font-semibold bg-teal/10 text-teal px-3 py-1 rounded-full">MoRTH</span>
+                            </div>
+                            <h3 class="project-title text-xl font-bold text-slate-100 mb-2">Coastal Road, Odisha</h3>
+                            <p class="project-desc text-slate-400 flex-grow">Designed 163 km of a 4-lane coastal highway, including a GIS-based Land Acquisition Plan and drawings for cross-sections and drainage.</p>
+                            <button class="deconstruct-button mt-4 px-4 py-2 bg-teal/10 text-teal text-sm font-semibold rounded-lg hover:bg-teal/20 transition-colors">✨ Deconstruct Project</button>
+                        </div>
+                    </div>
+                </section>
+            </div>
+
+            <!-- Contact Page -->
+            <div id="contact-page" class="page hidden">
+                <section class="py-12 text-center flex flex-col items-center justify-center min-h-[60vh]">
+                     <div class="max-w-xl mx-auto w-full">
+                        <h2 class="text-3xl font-bold mb-8 text-slate-100 flex items-center">
+                             <span class="text-teal mr-3">05.</span> Contact Me
+                            <span class="flex-grow ml-6 h-px bg-slate-700"></span>
+                        </h2>
+                        <form id="contact-form" class="space-y-6 text-left">
+                            <div>
+                                <label for="name" class="block mb-2 text-sm font-medium text-slate-400">Your Name</label>
+                                <input type="text" id="name" name="name" required class="w-full p-3 bg-slate-800 border border-slate-700 rounded-md focus:ring-teal focus:border-teal transition">
+                            </div>
+                             <div>
+                                <label for="email" class="block mb-2 text-sm font-medium text-slate-400">Your Email</label>
+                                <input type="email" id="email" name="email" required class="w-full p-3 bg-slate-800 border border-slate-700 rounded-md focus:ring-teal focus:border-teal transition">
+                            </div>
+                             <div>
+                                <label for="message" class="block mb-2 text-sm font-medium text-slate-400">Your Message</label>
+                                <textarea id="message" name="message" rows="5" required class="w-full p-3 bg-slate-800 border border-slate-700 rounded-md focus:ring-teal focus:border-teal transition"></textarea>
+                            </div>
+                            <div>
+                                <button type="submit" class="w-full px-8 py-3 border-2 border-teal text-teal rounded-md font-medium hover:bg-teal/10 transition-colors duration-300 cta-button">
+                                    Send Message
+                                </button>
+                            </div>
+                        </form>
+                        <div id="form-success-message" class="hidden mt-6 p-4 text-center border border-teal text-teal rounded-md">
+                            Thank you for your message! I'll get back to you soon.
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="container mx-auto px-6 md:px-12 py-6 text-center text-slate-500 text-sm">
+        <div class="mb-4 flex justify-center space-x-6">
+            <a href="mailto:Gauravsb0711@gmail.com" class="hover:text-teal transition-colors">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-mail"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+            </a>
+             <a href="tel:+918565030232" class="hover:text-teal transition-colors">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-phone"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+            </a>
+        </div>
+        <p>Designed & Built by Gaurav Pandey</p>
+    </footer>
+
+    <!-- Gemini Project Deconstruction Modal -->
+    <div id="project-modal" class="modal-overlay">
+        <div class="modal-content relative">
+            <button id="modal-close-button" class="absolute top-4 right-4 text-slate-400 hover:text-teal">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+            </button>
+            <h3 id="modal-title" class="text-2xl font-bold text-slate-100 mb-4">Deconstructing Project...</h3>
+            <div id="modal-body" class="text-slate-400 space-y-4">
+                <div id="modal-loader" class="flex justify-center py-8">
+                    <div class="loader"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // --- Page Router ---
+            const pages = document.querySelectorAll('.page');
+            const navLinks = document.querySelectorAll('.nav-link');
+            const ctaLinks = document.querySelectorAll('.cta-nav-link');
+
+            function showPage(pageId) {
+                // Default to home page
+                if (!pageId) {
+                    pageId = 'home';
+                }
+
+                pages.forEach(page => {
+                    if (page.id === `${pageId}-page`) {
+                        page.classList.remove('hidden');
+                    } else {
+                        page.classList.add('hidden');
+                    }
+                });
+
+                // Update active nav link
+                navLinks.forEach(link => {
+                    if (link.href.endsWith(`#${pageId}`)) {
+                        link.classList.add('active');
+                    } else {
+                        link.classList.remove('active');
+                    }
+                });
+                
+                window.scrollTo(0,0); // Scroll to top on page change
+            }
+
+            function handleNavigation(e) {
+                e.preventDefault();
+                const targetId = e.currentTarget.hash.substring(1);
+                // Use History API to change URL without full reload
+                history.pushState({ page: targetId }, null, `#${targetId}`);
+                showPage(targetId);
+                
+                // Close mobile menu on navigation
+                 if (!mobileMenu.classList.contains('hidden')) {
+                    mobileMenu.classList.add('hidden');
+                }
+            }
+
+            navLinks.forEach(link => link.addEventListener('click', handleNavigation));
+            ctaLinks.forEach(link => link.addEventListener('click', handleNavigation));
+
+
+            // Handle browser back/forward buttons
+            window.addEventListener('popstate', (e) => {
+                const pageId = e.state ? e.state.page : 'home';
+                showPage(pageId);
+            });
+
+            // Show initial page based on URL hash
+            const initialPageId = window.location.hash ? window.location.hash.substring(1) : 'home';
+            showPage(initialPageId);
+            // Set initial state for history
+            history.replaceState({ page: initialPageId }, null, `#${initialPageId}`);
+
+
+            // --- Mobile Menu Toggle ---
+            const mobileMenuButton = document.getElementById('mobile-menu-button');
+            const mobileMenu = document.getElementById('mobile-menu');
+            
+            mobileMenuButton.addEventListener('click', () => {
+                mobileMenu.classList.toggle('hidden');
+            });
+            
+            // --- Contact Form ---
+            const contactForm = document.getElementById('contact-form');
+            const formSuccessMessage = document.getElementById('form-success-message');
+
+            if(contactForm) {
+                contactForm.addEventListener('submit', (e) => {
+                    e.preventDefault();
+                    // In a real app, you'd send this data to a server.
+                    // For this demo, we'll just show a success message.
+                    contactForm.reset();
+                    formSuccessMessage.classList.remove('hidden');
+                    setTimeout(() => {
+                        formSuccessMessage.classList.add('hidden');
+                    }, 5000); // Hide message after 5 seconds
+                });
+            }
+
+            // --- Gemini API Project Deconstruction ---
+            const deconstructButtons = document.querySelectorAll('.deconstruct-button');
+            const modal = document.getElementById('project-modal');
+            const modalTitle = document.getElementById('modal-title');
+            const modalBody = document.getElementById('modal-body');
+            const modalLoader = document.getElementById('modal-loader');
+            const modalCloseButton = document.getElementById('modal-close-button');
+
+            deconstructButtons.forEach(button => {
+                button.addEventListener('click', async (e) => {
+                    const card = e.target.closest('.glass-card');
+                    const projectTitle = card.querySelector('.project-title').innerText;
+                    const projectDesc = card.querySelector('.project-desc').innerText;
+
+                    // Show modal and loader
+                    modal.classList.add('is-visible');
+                    modalLoader.style.display = 'flex';
+                    modalBody.innerHTML = ''; 
+                    modalBody.appendChild(modalLoader);
+                    modalTitle.innerText = `Deconstructing: ${projectTitle}`;
+
+                    const prompt = `
+                        As an expert civil engineer and project manager, provide a detailed deconstruction of a highway project.
+                        Project Title: "${projectTitle}"
+                        Project Description: "${projectDesc}"
+                        Based on this, generate a hypothetical but realistic and detailed analysis. Structure your response with the following sections, using markdown-style formatting for titles (e.g., using **bold text** for headings):
+                        **1. Key Engineering Challenges:**
+                        (List 3-4 likely technical, logistical, or environmental challenges for this specific type of project. For example, for a coastal road, mention soil salinity and storm surges. For a greenfield expressway, mention land acquisition and challenging terrain.)
+                        **2. Proposed Technical Solutions:**
+                        (For each challenge, propose a credible engineering solution. For example, for soil issues, mention ground improvement techniques. For interchanges, suggest specific types like trumpet or cloverleaf based on context.)
+                        **3. Simplified Project Lifecycle:**
+                        (Outline 4-5 key phases from start to finish, such as 'Feasibility & DPR', 'Land Acquisition & Clearances', 'Earthwork & Structure Construction', 'Pavement & Finishing', and 'Commissioning & Handover'.)
+                        **4. Stakeholder Communication Brief:**
+                        (Write a brief, professional summary suitable for an update to a client like NHAI or MoRTH, highlighting progress and key decisions.)
+                    `;
+                    
+                    try {
+                        let chatHistory = [{ role: "user", parts: [{ text: prompt }] }];
+                        const payload = { contents: chatHistory };
+                        const apiKey = ""; // API key will be automatically provided
+                        const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
+                        
+                        const response = await fetch(apiUrl, {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify(payload)
+                        });
+
+                        if (!response.ok) {
+                            throw new Error(`API request failed with status ${response.status}`);
+                        }
+
+                        const result = await response.json();
+
+                        let text = 'Sorry, the deconstruction could not be generated at this time.';
+                        if (result.candidates && result.candidates.length > 0 &&
+                            result.candidates[0].content && result.candidates[0].content.parts &&
+                            result.candidates[0].content.parts.length > 0) {
+                            text = result.candidates[0].content.parts[0].text;
+                        }
+                        
+                        const formattedText = text
+                            .replace(/\*\*(.*?)\*\*/g, '<strong class="text-teal text-lg block mt-4 mb-2">$1</strong>')
+                            .replace(/\n/g, '<br>');
+
+                        modalLoader.style.display = 'none';
+                        modalBody.innerHTML = formattedText;
+
+                    } catch (error) {
+                        console.error("Error calling Gemini API:", error);
+                        modalLoader.style.display = 'none';
+                        modalBody.innerHTML = `<p class="text-red-400">An error occurred while generating the project deconstruction. Please try again later.</p>`;
+                    }
+                });
+            });
+
+            function closeModal() {
+                modal.classList.remove('is-visible');
+            }
+
+            modalCloseButton.addEventListener('click', closeModal);
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) {
+                    closeModal();
+                }
+            });
+        });
+    </script>
+</body>
+</html>
